@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "final-report.schema.json",
+  "title": "Final Report",
+  "description": "Estructura JSON obligatoria del reporte final del Research Council.",
+  "type": "object",
+  "required": [
+    "title", "date", "research_type", "main_question", "recommendation", "confidence"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "title": { "type": "string" },
+    "date": { "type": "string", "description": "YYYY-MM-DD" },
+    "research_type": {
+      "type": "string",
+      "enum": ["enterprise_ai", "procurement", "technology_comparison", "strategic", "generic"]
+    },
+    "main_question": { "type": "string" },
+    "context": { "type": "string" },
+    "objective": { "type": "string" },
+    "patterns_used": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["fan_out_and_synthesize", "adversarial_verification", "generate_and_filter", "tournament", "loop_until_done", "simple_analysis", "dynamic_workflow", "deep_research_delegation"]
+      }
+    },
+    "subquestions": { "type": "array", "items": { "type": "string" } },
+    "evidence_matrix": {
+      "type": "array",
+      "items": { "type": "object" },
+      "description": "Filas conforme a evidence-matrix.schema.json."
+    },
+    "key_findings": { "type": "array", "items": { "type": "string" } },
+    "contradictions": { "type": "array", "items": { "type": "string" } },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "advantages": { "type": "array", "items": { "type": "string" } },
+          "disadvantages": { "type": "array", "items": { "type": "string" } },
+          "risk": { "type": "string" },
+          "cost_complexity": { "type": "string" },
+          "when_to_use": { "type": "string" }
+        }
+      }
+    },
+    "comparison_matrix": { "type": "array", "items": { "type": "object" } },
+    "adversarial_review": { "type": "array", "items": { "type": "string" } },
+    "risks_and_controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk": { "type": "string" },
+          "impact": { "type": "string", "enum": ["alto", "medio", "bajo"] },
+          "probability": { "type": "string", "enum": ["alta", "media", "baja"] },
+          "control": { "type": "string" }
+        }
+      }
+    },
+    "recommendation": { "type": "string" },
+    "confidence": {
+      "type": "string",
+      "enum": ["alta", "media", "baja"],
+      "description": "Nivel de confianza ponderado por calidad de evidencia."
+    },
+    "what_would_change_the_conclusion": { "type": "array", "items": { "type": "string" } },
+    "next_steps": { "type": "array", "items": { "type": "string" } },
+    "limitations": { "type": "array", "items": { "type": "string" } }
+  }
+}
