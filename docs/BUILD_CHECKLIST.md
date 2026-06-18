@@ -12,7 +12,7 @@
 
 ## Última actualización
 - Fecha: 2026-06-18
-- Punto actual: FASES A–G COMPLETAS y validadas (schemas, frontmatter, consistencia, no-anidacion, test manual). Pendiente solo FASE H (auditor de cumplimiento + gate + commit/PR).
+- Punto actual: COMPLETO. Fases A-H hechas. Commit + push + PR #1 (draft) creados. Auditor: CUMPLE.
 - Siguiente acción: al completar B–F, validar (Fase G: schemas, frontmatter, consistencia, test manual + auditor de cumplimiento), luego entrega (Fase H).
 - IDs de agentes en background: B=research agents, C=verif/síntesis, D=rúbricas, E=docs, F=soporte/ejemplos/workflows.
 
@@ -90,8 +90,8 @@
 ## FASE H — Entrega (gate antes de commit)
 - [x] Mostrar al usuario: árbol, archivos críticos, invocación, uso con/sin dynamic workflow, limitaciones
 - [x] Commit descriptivo
-- [ ] Push -u origin claude/implementation-plan-review-ae7lii
-- [ ] PR en draft
+- [x] Push -u origin claude/implementation-plan-review-ae7lii
+- [x] PR en draft (#1)
 
 ---
 
