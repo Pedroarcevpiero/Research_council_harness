@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "evidence-matrix.schema.json",
+  "title": "Evidence Matrix",
+  "description": "Matriz de evidencia consolidada a partir de los research findings.",
+  "type": "object",
+  "required": ["rows"],
+  "additionalProperties": false,
+  "properties": {
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim", "source", "source_type", "quality", "used_in_conclusion"],
+        "additionalProperties": false,
+        "properties": {
+          "claim": { "type": "string" },
+          "source": { "type": "string" },
+          "source_type": {
+            "type": "string",
+            "enum": ["primaria", "secundaria", "academica", "comercial", "oficial", "opinion", "estandar", "local_file"]
+          },
+          "quality": {
+            "type": "string",
+            "enum": ["alta", "media", "baja", "no_usar"]
+          },
+          "recency": { "type": "string", "description": "Actualidad de la fuente." },
+          "relevance": {
+            "type": "string",
+            "enum": ["alta", "media", "baja"]
+          },
+          "limitations": { "type": "string" },
+          "contradictions": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Referencias a claims o fuentes que la contradicen."
+          },
+          "support_status": {
+            "type": "string",
+            "enum": ["supported", "partially_supported", "unsupported", "contradicted", "needs_human_validation"],
+            "description": "Veredicto del source-quality-auditor."
+          },
+          "used_in_conclusion": {
+            "type": "boolean",
+            "description": "Si el claim sustenta la recomendacion final."
+          }
+        }
+      }
+    }
+  }
+}

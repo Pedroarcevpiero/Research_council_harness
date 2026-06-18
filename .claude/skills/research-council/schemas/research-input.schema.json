@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "research-input.schema.json",
+  "title": "Research Input",
+  "description": "Entrada normalizada de una investigacion para el Research Council Harness.",
+  "type": "object",
+  "required": ["main_question", "objective", "depth"],
+  "additionalProperties": false,
+  "properties": {
+    "main_question": {
+      "type": "string",
+      "description": "Pregunta principal de investigacion, ya reformulada para ser investigable."
+    },
+    "context": {
+      "type": "string",
+      "description": "Contexto relevante aportado por el usuario."
+    },
+    "objective": {
+      "type": "string",
+      "description": "Que decision quiere tomar el usuario con el resultado."
+    },
+    "audience": {
+      "type": "string",
+      "description": "Para quien es el reporte (ejecutivo, tecnico, comprador, etc.)."
+    },
+    "scope": {
+      "type": "string",
+      "description": "Que entra dentro del alcance."
+    },
+    "out_of_scope": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Que queda fuera de alcance explicitamente."
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Restricciones: idioma, fecha, pais, industria, presupuesto, tecnologia."
+    },
+    "time_horizon": {
+      "type": "string",
+      "description": "Horizonte temporal relevante para la decision."
+    },
+    "country_or_region": { "type": "string" },
+    "industry": { "type": "string" },
+    "research_type": {
+      "type": "string",
+      "enum": ["enterprise_ai", "procurement", "technology_comparison", "strategic", "generic", "unclassified"],
+      "description": "Clasificacion del tipo de investigacion."
+    },
+    "depth": {
+      "type": "string",
+      "enum": ["rapida", "estandar", "profunda"],
+      "description": "Profundidad solicitada."
+    },
+    "needs_current_sources": { "type": "boolean" },
+    "needs_academic_sources": { "type": "boolean" },
+    "needs_official_sources": { "type": "boolean" },
+    "local_files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Rutas de archivos locales disponibles como evidencia."
+    },
+    "preferred_sources": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "success_criteria": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Criterios para considerar la investigacion completa."
+    }
+  }
+}

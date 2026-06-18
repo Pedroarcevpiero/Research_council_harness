@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "research-finding.schema.json",
+  "title": "Research Finding",
+  "description": "Salida estandar de cada investigador (subagent) en la fase fan-out.",
+  "type": "object",
+  "required": ["agent", "scope", "key_findings", "evidence"],
+  "additionalProperties": false,
+  "properties": {
+    "agent": {
+      "type": "string",
+      "description": "Nombre del subagent que produjo el hallazgo."
+    },
+    "scope": {
+      "type": "string",
+      "description": "Subpregunta o alcance que cubrio este investigador."
+    },
+    "key_findings": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Hallazgos principales, separando hechos de inferencias."
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim", "source", "source_type", "source_quality"],
+        "additionalProperties": false,
+        "properties": {
+          "claim": { "type": "string", "description": "Afirmacion soportada por la fuente." },
+          "source": { "type": "string", "description": "Identificacion de la fuente (titulo, url, archivo)." },
+          "source_type": {
+            "type": "string",
+            "enum": ["primaria", "secundaria", "academica", "comercial", "oficial", "opinion", "estandar", "local_file"],
+            "description": "Naturaleza de la fuente."
+          },
+          "source_quality": {
+            "type": "string",
+            "enum": ["alta", "media", "baja", "no_usar"],
+            "description": "Calidad segun rubrica source-quality."
+          },
+          "date": { "type": "string", "description": "Fecha de la fuente (YYYY o YYYY-MM-DD)." },
+          "quote_or_location": { "type": "string", "description": "Cita textual o ubicacion exacta del dato." },
+          "limitations": { "type": "string", "description": "Limites o sesgos de esta evidencia." }
+        }
+      }
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Incertidumbres detectadas."
+    },
+    "contradictions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Contradicciones observadas dentro de este alcance."
+    },
+    "open_questions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "recommended_follow_up": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "_comment": "EJEMPLO de hooks para Research Council Harness. NO ESTA ACTIVO. Copia manualmente al settings.json real solo los bloques que quieras, quita las claves _comment y ajusta rutas/comandos. Revisa cada comando antes de activar.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "_comment": "Hook (b): evita sobrescribir reportes existentes en outputs/.",
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"$(jq -r '.tool_input.file_path // empty')\"; case \"$f\" in */outputs/reports/*|*/outputs/json/*) [ -e \"$f\" ] && { echo 'Output ya existe: versiona por fecha/slug, no sobrescribas.' >&2; exit 2; } ;; esac; exit 0"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "_comment": "Hook (a): valida que el JSON final sea parseable.",
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"$(jq -r '.tool_input.file_path // empty')\"; case \"$f\" in */outputs/json/*.json) python3 -m json.tool \"$f\" >/dev/null 2>&1 || { echo \"JSON invalido: $f\" >&2; exit 2; } ;; esac; exit 0"
+          }
+        ]
+      },
+      {
+        "_comment": "Hook (e): verifica que el reporte .md tenga seccion de evidencia/fuentes.",
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"$(jq -r '.tool_input.file_path // empty')\"; case \"$f\" in */outputs/reports/*.md) grep -qi 'Matriz de evidencia' \"$f\" || { echo \"Falta seccion de evidencia/fuentes en: $f\" >&2; exit 2; } ;; esac; exit 0"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "_comment": "Hook (d): advierte antes de investigaciones profundas o dynamic workflows.",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "p=\"$(jq -r '.prompt // empty')\"; echo \"$p\" | grep -Eqi 'profund|dynamic workflow|ultracode' && echo 'Aviso: investigacion profunda/workflow puede consumir muchos tokens y tiempo. Confirma alcance.' >&2; exit 0"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "_comment": "Hook (c): registra fecha de fin de corrida en outputs/.run-log (local).",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "date -u +'%Y-%m-%dT%H:%M:%SZ run-complete' >> outputs/.run-log 2>/dev/null; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
