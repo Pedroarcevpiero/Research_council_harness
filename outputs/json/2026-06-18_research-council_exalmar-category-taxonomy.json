@@ -1,0 +1,113 @@
+{
+  "title": "Taxonomía de gestión de categorías de Procurement para Pesquera Exalmar y diseño de un Exalmar Taxonomy Council Harness",
+  "date": "2026-06-18",
+  "research_type": "procurement",
+  "main_question": "¿Cuál debe ser la estructura ideal de macro categorías, categorías, subcategorías y familias de compra para una pesquera industrial integrada (flota con/sin frío, harina/aceite, congelado) que sirva para category management, spend analysis, contratos marco, tarifarios, tail spend, sourcing y automatización con IA?",
+  "context": "Pesquera Exalmar: 5 unidades operativas (flota sin frío, flota con frío RSW/CSW, harina/aceite, congelado, transversal corporativo) en SAP. La clasificación por cuenta contable/proveedor/grupo SAP no basta.",
+  "objective": "Obtener la propuesta conceptual de taxonomía y la base para construir un Exalmar Taxonomy Council Harness en Claude Code.",
+  "patterns_used": ["fan_out_and_synthesize", "generate_and_filter", "adversarial_verification"],
+  "subquestions": [
+    "Marcos de category management y niveles de taxonomía",
+    "Estándares de clasificación (UNSPSC/CPV/eClass) y de equipos (ISO 14224/SAP PM/IMPA/NSN) y su uso",
+    "Cómo taxonomizan industrias comparables (alimentos, naval, frío, proceso)",
+    "Criterios de macro/sub categoría y de transversalidad",
+    "Modelo de atributos y diccionario de categoría",
+    "Construcción desde datos reales y métodos algorítmicos de inducción",
+    "Riesgos y gobernanza de la taxonomía"
+  ],
+  "evidence_matrix": [
+    {"claim": "Spend taxonomy típica de 3-4 niveles; MECE; estructurar por mercado proveedor, no por departamento; evitar 'Otros'", "source": "Sievo; Procurement Tactics", "source_type": "comercial", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "Práctica de consultoría sin estudio académico", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Spend cube = categoría x proveedor x unidad de negocio", "source": "SpendHQ; Procurement Tactics", "source_type": "comercial", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "Convergencia de marketing", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Kraljic (1983): segmentar por valor x riesgo de suministro", "source": "CIPS (vía secundarias)", "source_type": "estandar", "quality": "alta", "recency": "1983/2026", "relevance": "alta", "limitations": "Página CIPS no accesible (503); reconstruido de secundarias", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "No existe estándar de taxonomía de compras pesquero; usar proxies (naval, MRO, alimentos)", "source": "búsqueda sectorial", "source_type": "secundaria", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "Ausencia de evidencia, no inexistencia probada", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "IMPA Marine Stores Guide: 50k+ códigos, estándar de catálogo naval", "source": "Wikipedia; ShipServ", "source_type": "secundaria", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "No se accedió a la jerarquía completa (licencia)", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Taxonomía de COMPRAS (UNSPSC/CPV/eClass) != taxonomía de EQUIPOS (ISO 14224/SAP PM); complementarias, requieren mapping", "source": "UNGM; eclass.eu; iso.org; SAP Help", "source_type": "oficial", "quality": "alta", "recency": "2026", "relevance": "alta", "limitations": "ISO 14224 no leído completo (403)", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "UNSPSC: 4 niveles, gratuito, amplia adopción, sin diccionario de atributos robusto", "source": "UNGM (ONU)", "source_type": "oficial", "quality": "alta", "recency": "2026", "relevance": "alta", "limitations": "Granularidad limitada para equipos especializados", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "eClass: único con diccionario de atributos certificado ISO 13584-42/IEC 61360", "source": "eclass.eu", "source_type": "oficial", "quality": "alta", "recency": "2026", "relevance": "alta", "limitations": "Requiere licencia; cifras varían por release", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "CPV: obligatorio solo en contratación pública UE", "source": "EUR-Lex", "source_type": "oficial", "quality": "alta", "recency": "2024-2026", "relevance": "baja", "limitations": "No aplica a Exalmar (privado, Perú)", "support_status": "supported", "used_in_conclusion": false},
+    {"claim": "ISO 14224: taxonomía de equipos para confiabilidad (petróleo/gas); niveles + boundary", "source": "iso.org (vía secundaria)", "source_type": "estandar", "quality": "alta", "recency": "2016", "relevance": "alta", "limitations": "Texto completo de pago; '5 niveles' sin verificar en primaria", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "SAP PM functional location/equipment: jerarquía configurable por cliente, alinea con ISO 14224", "source": "SAP Help", "source_type": "oficial", "quality": "alta", "recency": "2026", "relevance": "alta", "limitations": "Configurable, no estándar universal", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Pipeline para descubrir familias: SBERT + UMAP + HDBSCAN; HDBSCAN por defecto falla en texto corto", "source": "IEEE 2021; posts técnicos", "source_type": "academica", "quality": "media", "recency": "2021", "relevance": "alta", "limitations": "No validado en SAP/español", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "TaxoClass: clasificación jerárquica con solo nombres de clase (supervisión débil) -> mapear a UNSPSC sin golden set grande", "source": "NAACL 2021", "source_type": "academica", "quality": "alta", "recency": "2021", "relevance": "alta", "limitations": "Inglés, dominio noticias/productos", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Record linkage Fellegi-Sunter (1969) + extensiones para dedup de proveedores/materiales", "source": "Science Advances; JOS", "source_type": "academica", "quality": "alta", "recency": "1969-2022", "relevance": "alta", "limitations": "No validado en procurement", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Score de confianza del modelo NO predice bien la exactitud real -> no basta umbral; HITL necesario", "source": "Knostic (blog)", "source_type": "comercial", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "Blog de vendor; patrón plausible", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Gobernanza MDM: Data Owner/Steward/Custodian + Data Council; versionado; SAP MDG", "source": "Umbrex; SAP Help", "source_type": "comercial", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "Playbook de consultoría (no normativo)", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Conflicto de category ownership Compras vs Flota (ahorro corto plazo vs TCO/operación)", "source": "Automotive Fleet", "source_type": "secundaria", "quality": "media", "recency": "2018", "relevance": "alta", "limitations": "Fuente de 2018; patrón vigente por inferencia", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Taxonomía sin mantenimiento degrada ~85%->60-70% en 2 años", "source": "Suplari (blog)", "source_type": "comercial", "quality": "baja", "recency": "2026", "relevance": "media", "limitations": "Vendor que vende la alternativa; no auditado", "support_status": "needs_human_validation", "used_in_conclusion": true},
+    {"claim": "HACCP obligatorio para procesadores/exportadores seafood (EE.UU.); GSA Seafood Processing Standard", "source": "folio3; GlobalSeafood", "source_type": "secundaria", "quality": "media", "recency": "2026", "relevance": "media", "limitations": "Alcance EE.UU.; verificar SANIPES Perú", "support_status": "partially_supported", "used_in_conclusion": true}
+  ],
+  "key_findings": [
+    "Taxonomía propia como principal; estándares como capas: UNSPSC=mapping/benchmark, eClass=diccionario de atributos, ISO 14224/SAP PM=taxonomía de equipos en paralelo, IMPA=flota.",
+    "Dos taxonomías complementarias (compra vs equipo) + mapping; no fusionarlas.",
+    "Las 4 dimensiones (cuenta contable, proveedor, material, categoría) deben mantenerse separadas.",
+    "Estructura de 3-4 niveles, MECE, por mercado proveedor; evitar 'Otros'.",
+    "Transversalidad como atributo, no como duplicación; específica por unidad solo cuando mercado/gestión difiere.",
+    "Construir desde datos reales (no en sala de reuniones) con pipeline clustering+clasificación+HITL y clase 'no clasificable'.",
+    "Sin gobernanza (Data Council, owners, versionado, stewardship) cualquier taxonomía degrada; el score de confianza no basta como control."
+  ],
+  "contradictions": [
+    "Vendors: 'la IA mantiene la taxonomía sola' vs MDM/HITL: 'sin gobernanza degrada' (la evidencia favorece gobernanza).",
+    "Cifras de eClass difieren entre fuentes (31k vs 45k clases): verificar release.",
+    "Niveles de ISO 14224 citados por secundarias, no verificados en la norma de pago.",
+    "Convergencia comercial en '3-4 niveles' y 'spend cube de 3 dimensiones' sin estudio independiente.",
+    "direct/indirect y CAPEX/OPEX ambiguos en flota/transporte: usar como atributos, no como eje primario."
+  ],
+  "alternatives": [
+    {"name": "UNSPSC como taxonomía principal", "advantages": ["estándar global", "gratuito"], "disadvantages": ["demasiado granular/amplia", "no refleja mercado proveedor de Exalmar"], "risk": "medio", "cost_complexity": "bajo", "when_to_use": "Solo como mapping/benchmark externo"},
+    {"name": "eClass como principal", "advantages": ["diccionario de atributos certificado"], "disadvantages": ["licencia", "orientación europea"], "risk": "medio", "cost_complexity": "medio", "when_to_use": "Como capa de atributos de categorías técnicas"},
+    {"name": "Taxonomía de equipos (ISO 14224/SAP PM) como principal", "advantages": ["precisa técnicamente"], "disadvantages": ["es para mantenimiento, no para comprar/negociar"], "risk": "medio", "cost_complexity": "medio", "when_to_use": "En paralelo, mapeada a compras"},
+    {"name": "Taxonomía propia por mercado proveedor + unidad de negocio, mapeada a estándares", "advantages": ["sirve para negociar/tarifar/tail spend/SAP", "conserva lógica propia"], "disadvantages": ["requiere construcción y gobernanza"], "risk": "bajo-medio", "cost_complexity": "medio", "when_to_use": "Recomendada (principal)"},
+    {"name": "Taxonomía por cuenta contable/proveedor", "advantages": ["fácil desde SAP"], "disadvantages": ["mezcla dimensiones; inútil para sourcing"], "risk": "alto", "cost_complexity": "bajo", "when_to_use": "Descartada"}
+  ],
+  "comparison_matrix": [
+    {"estandar": "Taxonomía propia", "rol": "Principal (negociar, tarifar, tail spend, ownership)"},
+    {"estandar": "UNSPSC", "rol": "Mapping externo + benchmark (gratuito)"},
+    {"estandar": "eClass", "rol": "Diccionario de atributos de categorías técnicas"},
+    {"estandar": "ISO 14224 / SAP PM functional location", "rol": "Taxonomía de equipos en paralelo + mapping a compras"},
+    {"estandar": "IMPA Marine Stores Guide", "rol": "Referencia/catálogo para MRO de flota"},
+    {"estandar": "HACCP/GSA/SANIPES", "rol": "Atributos de compliance para insumos de contacto alimentario"},
+    {"estandar": "CPV/NSN/NIGP", "rol": "No aplican (descarte)"}
+  ],
+  "adversarial_review": [
+    "Riesgo de categorías demasiado amplias o técnicas que no sirven para negociar/tarifar.",
+    "Sobreajuste a la data histórica (perpetuar el desorden) si se diseña solo bottom-up.",
+    "Dependencia excesiva de UNSPSC; mezcla de mercados proveedores incompatibles.",
+    "Confusión entre cuenta contable, proveedor, material y categoría (4 dimensiones).",
+    "Conflicto de ownership Compras vs Mantenimiento vs Flota vs Producción.",
+    "'Categorías estratégicas especiales' no debe ser macro categoría: es atributo Kraljic.",
+    "Clasificación automática masiva sin HITL; el score de confianza no es control suficiente."
+  ],
+  "risks_and_controls": [
+    {"risk": "Mezclar las 4 dimensiones (cuenta/proveedor/material/categoría)", "impact": "alto", "probability": "alta", "control": "Modelo de datos que las separa; SAP MDG; reglas explícitas"},
+    {"risk": "Categorías demasiado amplias o técnicas", "impact": "alto", "probability": "media", "control": "Criterios MECE + validación con spend real + revisión de compradores"},
+    {"risk": "Sobreajuste a la data histórica", "impact": "medio", "probability": "media", "control": "Combinar bottom-up (datos) + top-down (lógica de mercado)"},
+    {"risk": "Dependencia excesiva de UNSPSC", "impact": "medio", "probability": "media", "control": "UNSPSC solo como mapping; taxonomía propia principal"},
+    {"risk": "Mezclar mercados proveedores incompatibles", "impact": "alto", "probability": "media", "control": "Driver = mercado proveedor; separar subcategorías"},
+    {"risk": "Conflicto de ownership entre áreas", "impact": "alto", "probability": "alta", "control": "Category owner designado + Data Council + RACI"},
+    {"risk": "Clasificación automática errónea en masa", "impact": "alto", "probability": "media", "control": "HITL; golden set; no basta score de confianza; muestreo de auditoría"},
+    {"risk": "Degradación sin mantenimiento", "impact": "medio", "probability": "alta", "control": "Gobernanza viva: revisión periódica, versionado, stewardship"},
+    {"risk": "Categoría 'no clasificable' mal gestionada", "impact": "medio", "probability": "alta", "control": "Clase explícita 'no clasificable' + cola de revisión humana"},
+    {"risk": "Confusión taxonomía de compra vs de equipo", "impact": "alto", "probability": "media", "control": "Dos taxonomías + tabla de mapping; no fusionarlas"}
+  ],
+  "recommendation": "Construir la taxonomía propia de Exalmar como principal (16 macro categorías propuestas, 3-4 niveles, MECE, por mercado proveedor), validada con 5 años de datos reales. Usar UNSPSC como mapping/benchmark, eClass como diccionario de atributos, e ISO 14224/SAP PM como taxonomía de equipos en paralelo mapeada; IMPA para flota y HACCP/SANIPES para compliance alimentario. Mantener separadas las 4 dimensiones (cuenta/proveedor/material/categoría) y construir la tabla de mapping. Validar 18->16 macro categorías: fusionar Importaciones en Logística y convertir 'Categorías estratégicas especiales' en atributo Kraljic; añadir MRO transversal. Gobernar con Data Council + category owners + versionado + clase 'no clasificable'. Construcción semiautomática con HITL (SBERT+UMAP+HDBSCAN para familias; TaxoClass para mapear a UNSPSC; Fellegi-Sunter para dedup). Materializar en el Exalmar Taxonomy Council Harness (orquestador + agentes por unidad de negocio + agente de equipos + agente de mercado proveedor + agente de atributos + agente de taxonomía + auditor adversarial + árbitro + revisión humana).",
+  "confidence": "media",
+  "what_would_change_the_conclusion": [
+    "El spend cube real de Exalmar (volúmenes por categoría/proveedor/unidad) puede fusionar/dividir macro categorías.",
+    "La estructura SAP actual (grupos de materiales, clases de equipo, functional locations) define el mapping.",
+    "Un piloto de clasificación que mida cobertura/pureza/tasa de 'no clasificable' sobre texto SAP real en español.",
+    "Normativa local SANIPES/Perú que ajuste atributos de compliance alimentario."
+  ],
+  "next_steps": [
+    "Dias 0-30: reunir datos (5 años OC/SOLPED/HES/maestros/functional locations/contratos/cotizaciones); construir spend cube real y v0 de 16 macro categorías; definir gobernanza y clase 'no clasificable'. Entregables: macro_category_map.md, category_governance_model.md.",
+    "Dias 31-60: pipeline limpieza->SBERT+UMAP+HDBSCAN->familias->clasificación (TaxoClass)->HITL->golden set; talleres por unidad de negocio. Entregables: taxonomy_master.csv v1, category_dictionary.md, category_attribute_model.csv, cross_business_unit_categories.md, mro_transversal_report.md.",
+    "Dias 61-90: mapping a UNSPSC, atributos a eClass, tabla compras<->equipos (ISO 14224/SAP PM); métricas de calidad y ambiguous_categories.csv; versión inicial del Exalmar Taxonomy Council Harness. Entregables: mapping_rules.md, ambiguous_categories.csv, implementation_plan.md.",
+    "Outputs finales (10): taxonomy_master.csv, macro_category_map.md, category_dictionary.md, category_attribute_model.csv, mapping_rules.md, ambiguous_categories.csv, cross_business_unit_categories.md, mro_transversal_report.md, category_governance_model.md, implementation_plan.md."
+  ],
+  "limitations": [
+    "No existe estándar pesquero: la propuesta es hipótesis a validar; sin datos reales las familias finas son referenciales.",
+    "Evidencia mayormente comercial/consultoría; normas e informes (ISO 14224, eClass completo) tras paywall.",
+    "Sin benchmark de clasificación de texto SAP en español; medir con piloto propio.",
+    "Cifras de degradación (85%->60-70%) y de ahorro son de proveedores, no auditadas.",
+    "Normativa peruana (SANIPES, aduanas) no investigada en profundidad; verificar localmente."
+  ]
+}
