@@ -1,0 +1,116 @@
+{
+  "title": "Modelos de planificación y reposición de inventario para una pesquera estacional (Exalmar/Sanmar): clásico vs optimización, red central-satélite e Inventory Planning Council Harness",
+  "date": "2026-06-18",
+  "research_type": "procurement",
+  "main_question": "¿Qué modelos de pronóstico y reposición usar por tipo de SKU en una pesquera estacional con almacén central (~6000 SKUs) y satélites (~2000 SKUs), y conviene un enfoque clásico, de optimización o híbrido para sincronizar la red central-satélite?",
+  "context": "Exalmar/Sanmar: estacionalidad fuerte (anchoveta T1 abr-jul, T2 nov-ene; mantenimiento fuera de temporada; CHD/congelado feb-mar-abr). Red de 1 almacén central + satélites norte/sur del Callao; 30-40% SKUs comunes reabastecidos desde central, ~5% exclusivos. Variabilidad por cuotas/vedas/permisos/paradas.",
+  "objective": "Recomendar política de pronóstico y reposición por familia de SKU, decidir clásico vs optimización vs híbrido, diseñar la red central-satélite y un Inventory Planning Council Harness.",
+  "patterns_used": ["fan_out_and_synthesize", "generate_and_filter", "adversarial_verification"],
+  "subquestions": [
+    "Clasificación de demanda (SBC/ABC/XYZ/VED)",
+    "Métodos de pronóstico por tipo de SKU",
+    "Políticas clásicas de reposición e implementación SAP",
+    "Optimización de inventario (MEIO/newsvendor/pooling) y red central-satélite",
+    "Repuestos MRO y vínculo con mantenimiento y producción (dependiente vs independiente)",
+    "Riesgos, controles y calidad de datos"
+  ],
+  "evidence_matrix": [
+    {"claim": "Matriz SBC: ADI=1.32 / CV2=0.49 -> smooth/erratic/intermittent/lumpy", "source": "Syntetos, Boylan & Croston, JORS 56", "source_type": "academica", "quality": "alta", "recency": "2005", "relevance": "alta", "limitations": "Umbrales derivados bajo supuestos de distribución", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Croston (1972) primer método para demanda intermitente", "source": "Croston, ORQ 23", "source_type": "academica", "quality": "alta", "recency": "1972", "relevance": "alta", "limitations": "Supuesto Bernoulli", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Croston sesgado; SBA corrige con (1-alfa/2)", "source": "Syntetos & Boylan 2001/2005", "source_type": "academica", "quality": "alta", "recency": "2001-2005", "relevance": "alta", "limitations": "SBA puede dejar sesgo negativo residual", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "TSB actualiza probabilidad cada periodo (mejor ante obsolescencia)", "source": "Teunter, Syntetos & Babai, EJOR 214", "source_type": "academica", "quality": "alta", "recency": "2011", "relevance": "alta", "limitations": "Empiricamente SBA lo supera en algunos casos", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Bootstrapping (Markov 2 estados) para lumpy / distribucion sobre lead time", "source": "Willemain, Smart & Schwarz, IJF", "source_type": "academica", "quality": "alta", "recency": "2004", "relevance": "alta", "limitations": "Controversia de patente; 9 datasets", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "MAPE falla con ceros; usar MASE", "source": "Hyndman & Koehler, IJF 22", "source_type": "academica", "quality": "alta", "recency": "2006", "relevance": "alta", "limitations": "-", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "4 politicas canonicas (s,Q)/(s,S)/(R,S)/(R,s,S); base stock", "source": "Silver-Pyke-Peterson", "source_type": "academica", "quality": "alta", "recency": "1998", "relevance": "alta", "limitations": "Texto no leido completo", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "EOQ optimo solo con demanda/LT constantes, sin descuentos", "source": "Harris/Wilson (clasico)", "source_type": "academica", "quality": "media", "recency": "clasico", "relevance": "alta", "limitations": "-", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Safety stock combina variabilidad de demanda y de lead time", "source": "ASCM (APICS)", "source_type": "estandar", "quality": "alta", "recency": "2026", "relevance": "alta", "limitations": "-", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "SAP MRP types: VB/VM/V1/V2 (ROP), VV (forecast, deprecado->PD), ND (kanban); IBP=MEIO", "source": "SAP Community/Help", "source_type": "oficial", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "Foros de comunidad; verificar version", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "METRIC (Sherbrooke 1968): base MEIO repuestos (Poisson, base-stock, 2 echelons)", "source": "Springer (sintesis)", "source_type": "academica", "quality": "alta", "recency": "1968", "relevance": "alta", "limitations": "Resumen secundario", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "GSM vs SSM (Graves-Willems 2003 / Clark-Scarf 1960)", "source": "EJOR", "source_type": "academica", "quality": "alta", "recency": "2003", "relevance": "media", "limitations": "Abstract", "support_status": "supported", "used_in_conclusion": false},
+    {"claim": "Newsvendor: ratio critico Cu/(Cu+Co) para campanas/temporada", "source": "Zipkin/Snyder-Shen (via secundaria)", "source_type": "academica", "quality": "media", "recency": "clasico", "relevance": "alta", "limitations": "Formula confirmada; fuente secundaria", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Square-root law (Eppen 1979): SS centralizado ~ raiz(n); depende de colas ligeras", "source": "ResearchGate (Eppen)", "source_type": "academica", "quality": "alta", "recency": "1979", "relevance": "alta", "limitations": "Caveat de colas pesadas (repuestos lumpy)", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Pooling centraliza lentos/caros/variables; descentraliza rapidos/baratos", "source": "Axsater/Zipkin (via secundaria)", "source_type": "academica", "quality": "media", "recency": "clasico", "relevance": "alta", "limitations": "-", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "SAP IBP MIPO = metodo estocastico propietario (caja negra)", "source": "SAP Help", "source_type": "oficial", "quality": "alta", "recency": "2026", "relevance": "media", "limitations": "No auditable; lock-in", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Casos reales (Zalando) extienden (R,s,Q) en vez de MEIO completo", "source": "Zalando Eng. blog", "source_type": "comercial", "quality": "media", "recency": "2026", "relevance": "media", "limitations": "Un caso", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Insurance spares se dimensionan por costo de parada, no rotacion; Poisson/Compound-Poisson/ZIP", "source": "Kennedy 2002; Omega 2017", "source_type": "academica", "quality": "alta", "recency": "2002-2017", "relevance": "alta", "limitations": "Abstracts (paywall)", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Repuesto atado a PM+Equipment BOM = demanda DEPENDIENTE -> MRP, no forecast", "source": "SAP PM/MM; literatura mantenimiento", "source_type": "oficial", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "Blogs de comunidad", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Insumos/empaques = dependientes del plan de produccion + shelf life", "source": "Implement Consulting; MRP", "source_type": "comercial", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "Ejemplos farma", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Consumo historico != demanda real (censored demand, spiral-down)", "source": "arXiv 2025", "source_type": "academica", "quality": "alta", "recency": "2025", "relevance": "alta", "limitations": "Dominio retail", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Clasificar mal + SBA: ~25% menos MSE; caso ~13.6% menos valor de inventario", "source": "Syntetos-Boylan; caso REF UK", "source_type": "academica", "quality": "media", "recency": "2005", "relevance": "alta", "limitations": "Caso unico", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Fallo de adopcion = gobernanza/datos, no sofisticacion del modelo", "source": "StockIQ; change mgmt", "source_type": "comercial", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "-", "support_status": "partially_supported", "used_in_conclusion": true}
+  ],
+  "key_findings": [
+    "Una politica por celda de matriz SBC (patron) x VED (criticidad) x ABC (valor) x XYZ (regularidad), no una politica unica.",
+    "Metricas correctas: para intermitente usar MASE y fill rate, NO MAPE.",
+    "Separar demanda dependiente (mantenimiento PM/BOM y produccion -> MRP/plan) de independiente (falla aleatoria/consumo general -> forecast) es la decision de mayor impacto.",
+    "Repuestos criticos se dimensionan por costo de parada (Poisson/Compound-Poisson), no por rotacion; EOQ aqui es un error.",
+    "Estacionalidad pesquera = campanas: insumos/empaques de temporada por plan de produccion + newsvendor.",
+    "Red: risk pooling (square-root law) -> centralizar lentos/caros/variables, descentralizar rapidos/baratos; comunes via central + reabastecimiento programado + transshipment.",
+    "Empezar clasico bien parametrizado; optimizar (MEIO) despues y solo donde paga; el cuello de botella real es calidad de datos y adopcion, no la sofisticacion del modelo."
+  ],
+  "contradictions": [
+    "TSB teoricamente insesgado pero SBA lo supera empiricamente en algunos casos de obsolescencia.",
+    "Vendors ('MEIO superior y rapido') vs ingenieria real (extensiones de (R,s,Q)).",
+    "Repuestos 'demanda independiente' (manuales) vs 'dependiente' (mantenimiento/SAP PM): depende de si hay plan formal.",
+    "Square-root law citada como universal pero depende de colas ligeras (demanda lumpy es de cola pesada).",
+    "Cifras comerciales (47% MTTR, 68% quiebres, 13.6% ahorro) ilustrativas, no auditadas."
+  ],
+  "alternatives": [
+    {"name": "Modelos clasicos (ROP/EOQ/(s,S)/(R,S)/Croston-SBA/DRP)", "advantages": ["facil", "explicable", "barato", "implementable en Excel/Python/SAP"], "disadvantages": ["menos optimo en redes complejas", "requiere perfiles para estacionalidad"], "risk": "bajo", "cost_complexity": "bajo", "when_to_use": "Base para casi todos los segmentos; primera etapa"},
+    {"name": "Optimizacion (MEIO/newsvendor/MILP/simulacion)", "advantages": ["mejor en red multi-echelon", "robusta ante estacionalidad", "newsvendor ideal para campanas"], "disadvantages": ["datos limpios y altos", "caja negra (IBP)", "costo/expertise", "riesgo de sobreingenieria"], "risk": "medio-alto", "cost_complexity": "alto", "when_to_use": "Subconjunto de alto valor multi-echelon con datos limpios; etapa 2"},
+    {"name": "Modelo hibrido por segmento", "advantages": ["clasico donde basta + optimizacion donde paga", "newsvendor para campanas", "pooling para red"], "disadvantages": ["requiere segmentacion y gobernanza"], "risk": "bajo-medio", "cost_complexity": "medio", "when_to_use": "Recomendado para Exalmar/Sanmar"}
+  ],
+  "comparison_matrix": [
+    {"criterio": "Facilidad de implementacion", "clasico": "alta", "optimizacion": "baja-media"},
+    {"criterio": "Datos requeridos", "clasico": "moderados", "optimizacion": "altos y limpios"},
+    {"criterio": "Explicabilidad", "clasico": "alta", "optimizacion": "baja (caja negra comercial)"},
+    {"criterio": "Costo", "clasico": "bajo", "optimizacion": "alto"},
+    {"criterio": "Robustez ante estacionalidad", "clasico": "media", "optimizacion": "alta (newsvendor/estocastico)"},
+    {"criterio": "Red central-satelite", "clasico": "media (DRP+pooling heuristico)", "optimizacion": "alta (MEIO)"},
+    {"criterio": "Riesgo de sobreingenieria", "clasico": "bajo", "optimizacion": "alto"},
+    {"criterio": "Recomendacion", "clasico": "Etapa 1 (base)", "optimizacion": "Etapa 2 (donde paga)"}
+  ],
+  "adversarial_review": [
+    "Clasificar mal un SKU (crítico intermitente como smooth) y aplicar metodo equivocado.",
+    "Aplicar EOQ/forecast estadistico a repuestos criticos o a demanda dependiente de mantenimiento/produccion.",
+    "Confundir consumo historico con demanda real (censored demand, spiral-down).",
+    "Optimizar sobre datos sucios (LT, criticidad, UoM); garbage in/garbage out.",
+    "Reducir stock de repuesto critico y causar parada; duplicar stock en satelites; ignorar variabilidad de lead time.",
+    "No separar demanda de mantenimiento vs produccion vs emergencia; tratar todos los centros igual.",
+    "Sobreingenieria matematica sin adopcion operativa (modelo que nadie usa)."
+  ],
+  "risks_and_controls": [
+    {"risk": "Clasificar mal un SKU", "impact": "alto", "probability": "media", "control": "Matriz SBCxVED auditada; revision de muestras"},
+    {"risk": "EOQ/forecast en repuesto critico o demanda dependiente", "impact": "alto", "probability": "media", "control": "Split dependiente/independiente; MRP para PM/produccion"},
+    {"risk": "Consumo historico confundido con demanda (censored)", "impact": "alto", "probability": "alta", "control": "Registrar quiebres; corregir censura"},
+    {"risk": "Optimizar sobre datos sucios", "impact": "alto", "probability": "alta", "control": "Saneo de datos maestros como prerrequisito"},
+    {"risk": "Reducir stock de repuesto critico -> parada", "impact": "alto", "probability": "media", "control": "HITL obligatorio; escalar a mantenimiento; nivel de servicio por criticidad"},
+    {"risk": "Duplicar stock en satelites", "impact": "medio", "probability": "alta", "control": "Pooling/centralizacion; visibilidad de red; bloqueo de compra cruzada"},
+    {"risk": "Ignorar variabilidad de lead time", "impact": "medio", "probability": "alta", "control": "Safety stock con sigma(demanda) y sigma(LT)"},
+    {"risk": "Sobreingenieria sin adopcion", "impact": "alto", "probability": "media", "control": "Empezar simple; gestion del cambio; ownership del forecast"},
+    {"risk": "No separar mantenimiento/produccion/emergencia", "impact": "alto", "probability": "media", "control": "Etiquetar origen de demanda; tres flujos distintos"},
+    {"risk": "Gobernanza de parametros debil", "impact": "medio", "probability": "media", "control": "Aprobacion de cambios de min-max/SS (estilo COSO); versionado"}
+  ],
+  "recommendation": "Modelo HIBRIDO por segmento. Clasificar cada SKU con SBC (ADI/CV2, umbrales 1.32/0.49) x VED x ABC x XYZ y separar demanda dependiente (mantenimiento PM+Equipment BOM y produccion -> MRP/plan) de independiente (forecast). Politicas: smooth/bajo valor/alta frecuencia -> min-max/two-bin/ROP; insumos-produccion -> MRP/DRP+ROP estacional; empaques de campana -> newsvendor; intermitente MRO -> Croston/SBA/TSB+(s,S)/base-stock por criticidad; lumpy critico -> bootstrapping/Poisson+insurance stock por riesgo de parada (98-99%, HITL); alto valor lento -> buy-to-order; comun central-satelite -> central+reabastecimiento programado (DRP)+transshipment con pooling; exclusivo -> local por criticidad; non-moving -> depurar. Red: centralizar lentos/caros/variables, descentralizar rapidos/baratos. Empezar clasico bien parametrizado tras sanear datos maestros; anadir optimizacion (newsvendor para campanas; MEIO via SAP IBP o Python solo para alto valor multi-echelon con datos limpios). NO usar EOQ ni forecast estadistico en repuestos criticos intermitentes. Metricas con MASE/fill rate (no MAPE). Herramientas: Python+Power BI para analisis, SAP MM para ejecucion, SAP IBP solo si se justifica. Materializar en el Inventory Planning Council Harness (14 subagents) con HITL y trazabilidad.",
+  "confidence": "media",
+  "what_would_change_the_conclusion": [
+    "Auditoria de calidad de datos (completitud de demanda, exactitud de lead times, quiebres no registrados) puede habilitar o descartar MEIO.",
+    "La proporcion real de SKUs intermitentes/lumpy vs regulares condiciona la mezcla de metodos.",
+    "Costo real de parada por equipo critico (define insurance stock).",
+    "Existencia de planes formales de mantenimiento/produccion (define cuanto es demanda dependiente vs independiente)."
+  ],
+  "next_steps": [
+    "Dias 0-30: cargar 5 anos de consumos; auditar calidad de datos; calcular ADI y CV2; clasificar SBC x VED/ABC; detectar estacionalidad; marcar dependiente vs independiente. Entregables: demand_classification.csv, sku_segmentation.csv, data_requirements.md.",
+    "Dias 31-60 (PoC): seleccion de forecast por segmento; diseno de politicas; safety stock con variabilidad de LT; newsvendor para empaques de campana; simular fill rate vs capital en familia piloto. Entregables: inventory_policy_by_sku.csv, forecast_model_recommendation.csv, safety_stock_parameters.csv, seasonal_profile_by_sku.csv, critical_spares_report.md.",
+    "Dias 61-90: central_satellite_policy.csv; analisis de pooling/centralizacion y transshipment; optimization_feasibility_report.md (MEIO si/no); dashboard_metrics.md; gobernanza de parametros; version inicial del harness. Entregable: implementation_plan_30_60_90.md.",
+    "Meses 4-12: escalar por familias; integrar SAP PM<->MM (demanda dependiente); evaluar SAP IBP/MEIO para alto valor; consolidar contratos marco/VMI; S&OP estacional.",
+    "Metricas: fill rate, service level, stockout rate, inventory turnover, dias de inventario, valor de inventario, stock obsoleto/lento, compras de emergencia, transferencias, forecast accuracy (MASE/WAPE no MAPE), bias, accuracy por patron, reduccion de quiebres/capital/compras urgentes, cumplimiento de mantenimiento programado."
+  ],
+  "limitations": [
+    "No hay evidencia pesquera especifica; proxies de mineria, oil&gas, manufactura, food, retail. Cuotas/vedas no cubiertas por la literatura; modelar como eventos con el plan.",
+    "Parametros (niveles de servicio, costos de parada, LT) deben venir de datos reales; cifras comerciales ilustrativas, no auditadas.",
+    "Textos clasicos (Silver-Pyke-Peterson, Axsater, Zipkin) y papers tras paywall: formulas via secundarias, verificar en primarias antes de codificar.",
+    "SAP: comportamiento de MRP types/IBP depende de version (ECC vs S/4HANA) y configuracion.",
+    "Sin auditoria de calidad de datos, la viabilidad de MEIO no puede afirmarse."
+  ]
+}
