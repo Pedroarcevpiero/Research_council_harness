@@ -1,0 +1,108 @@
+{
+  "title": "Plataformas y sistemas agénticos de Procurement (estado del mercado 2024-2026 y arquitectura de referencia para un harness propio)",
+  "date": "2026-06-18",
+  "research_type": "procurement",
+  "main_question": "¿Cuáles son los sistemas agénticos/plataformas de IA más grandes y avanzadas para Procurement, Strategic Sourcing, Supplier Management, Spend Analysis, Contract Management y Supply Chain Procurement, qué tan agénticos son, y qué arquitectura tomar como referencia para construir un harness propio en Claude Code?",
+  "context": "Empresa industrial/pesquera evaluando construir un harness agéntico de Procurement con Claude Code (Dynamic Workflows, subagents), SAP exportado, cotizaciones PDF/Excel y búsqueda web.",
+  "objective": "Entender el estado del mercado y decidir la arquitectura de referencia para el harness propio.",
+  "patterns_used": ["fan_out_and_synthesize", "generate_and_filter", "tournament", "adversarial_verification"],
+  "subquestions": [
+    "Plataformas líderes con IA generativa/agentes/copilotos",
+    "Clasificación agéntico vs copiloto vs RPA vs analytics vs contract/supplier intelligence",
+    "Casos de uso concretos (precio, benchmark, tail spend, contratos, proveedores, riesgo, RFQ, ERP)",
+    "Madurez y posicionamiento de analistas (Gartner/Forrester/Spend Matters)",
+    "Patrones de arquitectura (RAG, orquestación, knowledge graph, spend cube, HITL, auditoría)",
+    "Riesgos, controles y gobernanza; qué debe quedar con aprobación humana"
+  ],
+  "evidence_matrix": [
+    {"claim": "Leaders Gartner MQ S2P 2025/2026: SAP, Oracle, Coupa, GEP, Ivalua", "source": "Comunicados SAP/Oracle/GEP/Coupa/Ivalua", "source_type": "comercial", "quality": "media", "recency": "2025-2026", "relevance": "alta", "limitations": "Republicación de vendors; informe Gartner tras paywall", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Next-Gen Ariba sobre BTP; agentes Joule con GA escalonada hacia 2026-2027", "source": "news.sap.com 2026-03", "source_type": "oficial", "quality": "alta", "recency": "2026", "relevance": "alta", "limitations": "Vendor; mezcla GA y roadmap; autonomía no validada", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Ivalua IVA Studio 'fully agentic' con soporte MCP, en beta, GA verano 2026", "source": "prnewswire/morningstar 2026-06-11", "source_type": "oficial", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "Beta; afirmación de autonomía = marketing no verificado", "support_status": "needs_human_validation", "used_in_conclusion": true},
+    {"claim": "Keelvar Kai orquestador + agentes; Gartner Market Guide 2026 (autonomous sourcing)", "source": "keelvar.com", "source_type": "comercial", "quality": "media", "recency": "2025-2026", "relevance": "alta", "limitations": "Cifras auto-reportadas; Market Guide no es ranking competitivo", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Fairmarkit Total Agentic Sourcing (tail+estratégico), integración SAP Ariba/S4HANA", "source": "businesswire 2026-04", "source_type": "comercial", "quality": "media", "recency": "2026", "relevance": "alta", "limitations": "Beta privada; cifras sin metodología", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "Zip Agentic Procurement Orchestration, 50+ agentes; SAP partner certificado", "source": "pymnts.com; sap.com partner listing", "source_type": "secundaria", "quality": "media", "recency": "2025", "relevance": "media", "limitations": "Cifras del propio Zip; listing no detalla profundidad", "support_status": "partially_supported", "used_in_conclusion": false},
+    {"claim": "Scoutbee adquirida por Coupa (oct-2025)", "source": "coupa.com newsroom", "source_type": "oficial", "quality": "alta", "recency": "2025-10", "relevance": "alta", "limitations": "Deja de ser especialista independiente", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Sievo #1 spend analytics Spend Matters varios años; enfoque >$1B", "source": "sievo.com; spendmatters", "source_type": "comercial", "quality": "media", "recency": "2025", "relevance": "alta", "limitations": "Ranking de analista creíble; cifras de ahorro auto-reportadas", "support_status": "partially_supported", "used_in_conclusion": true},
+    {"claim": "SAP Joule = orquestador central; pro-code LangGraph/CrewAI/AG2/Smolagents; A2A", "source": "architecture.learning.sap.com", "source_type": "oficial", "quality": "alta", "recency": "2026", "relevance": "alta", "limitations": "Doc cambiante; no detalla HITL", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "MCP estándar agente-herramienta; donado a Agentic AI Foundation (Linux Foundation) dic-2025", "source": "blog.modelcontextprotocol.io", "source_type": "oficial", "quality": "alta", "recency": "2026", "relevance": "alta", "limitations": "Sin casos de procurement con métricas verificables", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Autonomía real limitada; supervisión humana embebida; adopción experimental", "source": "arxiv 2601.13671 (survey)", "source_type": "academica", "quality": "alta", "recency": "2026-01", "relevance": "alta", "limitations": "No específico de procurement", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Alucinaciones no eliminadas; peligrosas en pago/compliance", "source": "arxiv 2507.19183", "source_type": "academica", "quality": "media", "recency": "2025", "relevance": "alta", "limitations": "Preprint; generaliza", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "EU AI Act: alto riesgo solo Anexo III; cumplimiento pleno 2-ago-2026; B2B no automático", "source": "artificialintelligenceact.eu; ec.europa.eu", "source_type": "oficial", "quality": "alta", "recency": "2024-2026", "relevance": "alta", "limitations": "Aplicabilidad a procurement B2B requiere análisis legal", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "NIST AI RMF e ISO 42001 voluntarios; exigen supervisión humana y registros", "source": "nist.gov; deloitte", "source_type": "oficial", "quality": "alta", "recency": "2023", "relevance": "alta", "limitations": "Voluntarios salvo exigencia contractual/sectorial", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Aprobación humana obligatoria en adjudicación/firma/pago; segregación de funciones", "source": "OWASP; approveit; jaggaer", "source_type": "secundaria", "quality": "media", "recency": "2025", "relevance": "alta", "limitations": "Buenas prácticas; no norma textual única", "support_status": "supported", "used_in_conclusion": true},
+    {"claim": "Integración SAP más documentada en Zycus (conector S/4HANA, 20+ escenarios) y GEP (SAP Adapter)", "source": "zycus.com; gep.com", "source_type": "oficial", "quality": "media", "recency": "2025-2026", "relevance": "alta", "limitations": "Páginas de producto; alcance API no verificado", "support_status": "partially_supported", "used_in_conclusion": true}
+  ],
+  "key_findings": [
+    "'Agéntico' está sobrecargado como marketing; la mayoría de suites son híbridos copiloto+workflow; autonomía verificable limitada a compras de bajo valor con guardrails.",
+    "Brecha anuncio->GA de 6-12 meses (Next-Gen Ariba, Ivalua IVA Studio, Zycus ANA, Jaggaer Autopilot).",
+    "Leaders de analistas en S2P: SAP, Oracle, Coupa, GEP, Ivalua; Zycus = Visionary.",
+    "Especialistas con mecánica agéntica más concreta: Keelvar, Fairmarkit, Zip; Sievo domina spend analytics; Scoutbee ya es de Coupa.",
+    "Patrón arquitectónico convergente (orquestador + agentes especializados + A2A/MCP + RAG/KG + IDP + HITL + auditoría) es transferible a Claude Code.",
+    "Integración SAP más documentada en Zycus y GEP.",
+    "Riesgos materiales: alucinación, fallas en cascada, fraude por agente comprometido, fuga de datos, sesgo de proveedor, vendor lock-in."
+  ],
+  "contradictions": [
+    "Marketing de autonomía vs. evidencia académica de autonomía acotada y adopción experimental.",
+    "Reconocimiento de analista (Leader) no implica madurez agéntica (Ivalua Leader pero IA en beta).",
+    "Hype Cycle y Market Guide no son Magic Quadrant (no son ranking competitivo).",
+    "Gobernanza presentada como 'obligatoria de facto' vs. NIST/ISO voluntarios y EU AI Act solo Anexo III.",
+    "SOX e IA: 'todo agente = riesgo SOX' vs. SOX aplica solo si impacta reporte financiero material."
+  ],
+  "alternatives": [
+    {"name": "Harness propio en Claude Code", "advantages": ["máxima trazabilidad y control", "barato de iterar", "sin lock-in", "encaja con SAP exportado + PDF/Excel", "HITL nativo"], "disadvantages": ["no es S2P transaccional", "mantenimiento propio", "sin red de proveedores"], "risk": "bajo-medio", "cost_complexity": "bajo-medio", "when_to_use": "Investigación, validación de precios, benchmark, tail spend triage, extracción documental"},
+    {"name": "Módulo agéntico de suite (SAP/Coupa/Ivalua)", "advantages": ["madurez", "soporte", "red de proveedores", "integración SAP de fábrica"], "disadvantages": ["costo alto", "lock-in", "funciones en beta/roadmap", "caja negra"], "risk": "medio", "cost_complexity": "alto", "when_to_use": "Reemplazo/upgrade de la plataforma S2P completa"},
+    {"name": "Especialista best-of-breed", "advantages": ["profundidad en un caso"], "disadvantages": ["silo", "otra integración", "algunos en beta", "Scoutbee absorbido"], "risk": "medio", "cost_complexity": "medio", "when_to_use": "Un dolor acotado (p. ej. tail spend)"},
+    {"name": "n8n/LangGraph custom", "advantages": ["flexible", "open source"], "disadvantages": ["construir orquestación/seguridad/auditoría desde cero", "más mantenimiento"], "risk": "medio-alto", "cost_complexity": "alto", "when_to_use": "Equipo con ingeniería fuerte y necesidad multi-herramienta"},
+    {"name": "Híbrido (suite + harness)", "advantages": ["combina compliance transaccional con agilidad de investigación"], "disadvantages": ["dos cosas que gobernar", "límites de responsabilidad"], "risk": "medio", "cost_complexity": "medio-alto", "when_to_use": "Empresa con/ que comprará suite y quiere capa de investigación propia"}
+  ],
+  "comparison_matrix": [
+    {"category": "Suite enterprise integral", "winner": "SAP (Next-Gen Ariba/Joule) u Oracle/Coupa", "note": "SAP para entornos SAP-céntricos; Leaders Gartner"},
+    {"category": "Sourcing autónomo", "winner": "Keelvar", "note": "Reconocido en autonomous sourcing optimization; Fairmarkit como alternativa tail+estratégico"},
+    {"category": "Tail spend", "winner": "Fairmarkit", "note": "Total Agentic Sourcing para tail spend"},
+    {"category": "Spend analytics", "winner": "Sievo", "note": "#1 Spend Matters consecutivo"},
+    {"category": "Supplier intelligence", "winner": "Scoutbee (hoy en Coupa) / Arkestro (precio)", "note": "Scoutbee ya no independiente"},
+    {"category": "Referencia arquitectónica para harness propio", "winner": "Patrón SAP Joule reproducido en Claude Code", "note": "orquestador + subagents + A2A/MCP + RAG + HITL + auditoría"}
+  ],
+  "adversarial_review": [
+    "Claims de marketing: 'negociación autónoma' (Zycus), 'ejecuta cualquier proceso S2P desde día uno' (Ivalua), 'orquestación agéntica total' (GEP/Coupa), todas las cifras de ROI.",
+    "No probado: autonomía real en producción; MCP nativo en procurement; cifras de impacto; posiciones exactas Gartner (paywall).",
+    "Conclusión a evitar: declarar un vendor 'el mejor' en abstracto.",
+    "Validación humana obligatoria: adjudicación, firma, pago; clasificación legal; cifras de ahorro.",
+    "Suavizar todo lenguaje de 'autonomía' a 'capacidades agénticas anunciadas con autonomía acotada'."
+  ],
+  "risks_and_controls": [
+    {"risk": "Alucinación en validación de precios/datos", "impact": "alto", "probability": "media", "control": "HITL + validación contra PO/maestro SAP + umbral de confianza"},
+    {"risk": "Fallas en cascada entre agentes", "impact": "alto", "probability": "baja", "control": "Aislar agentes, límites de alcance, verificación cruzada, kill-switch"},
+    {"risk": "Fraude por agente/proveedor comprometido", "impact": "alto", "probability": "baja", "control": "Verificación de proveedor independiente; segregación de funciones"},
+    {"risk": "Fuga de datos sensibles", "impact": "alto", "probability": "media", "control": "Datos locales, sin APIs externas, permisos mínimos"},
+    {"risk": "Sesgo en selección de proveedores", "impact": "medio", "probability": "media", "control": "Criterios explícitos, auditoría de recomendaciones, revisión humana"},
+    {"risk": "Vendor lock-in", "impact": "medio", "probability": "media", "control": "Lógica exportable, portabilidad de datos por contrato, estándares abiertos (MCP)"},
+    {"risk": "Decisión sin trazabilidad", "impact": "alto", "probability": "media", "control": "Logs inmutables (quién/qué/cuándo/por qué); auditoría diseñada"},
+    {"risk": "No-cumplimiento EU AI Act / SOX", "impact": "alto", "probability": "media", "control": "Análisis legal de aplicabilidad; aprobación humana en hitos materiales"}
+  ],
+  "recommendation": "Tomar como arquitectura de referencia el patrón 'orquestador + agentes especializados + RAG documental + integración SAP + human-in-the-loop + auditoría inmutable' (estilo SAP Joule) y reproducirlo en Claude Code: Dynamic Workflows como orquestador, subagents especializados, MCP/conectores para SAP, RAG para cotizaciones PDF/Excel + SAP exportado, y checkpoints humanos obligatorios antes de adjudicar/firmar/pagar. Alcance fase 1: investigación, validación de precios, benchmark, triage de tail spend y extracción documental; NO negociación/adjudicación autónoma. Si existe/ habrá suite S2P, adoptar enfoque híbrido (suite transaccional + harness propio de investigación).",
+  "confidence": "media",
+  "what_would_change_the_conclusion": [
+    "Acceso al informe Gartner/Forrester original con posiciones y criterios.",
+    "Casos de cliente auditados con métricas de autonomía real (% sin intervención humana).",
+    "Evidencia de MCP en producción en procurement con garantías de seguridad/auditoría.",
+    "Postmortem público de un incidente agéntico en procurement.",
+    "Confirmación de GA (no anuncio) de Next-Gen Ariba / IVA Studio / Merlin ANA con autonomía verificada."
+  ],
+  "next_steps": [
+    "PoC de extracción documental (RAG sobre cotizaciones PDF/Excel; medir error vs IDP comercial).",
+    "PoC de validación de precios (cotización vs SAP exportado + benchmark web, con HITL).",
+    "Diseñar gates humanos, segregación de funciones y logs inmutables desde el inicio.",
+    "Definir umbrales de monto/riesgo que disparan aprobación humana obligatoria.",
+    "Análisis legal de aplicabilidad EU AI Act/SOX a la jurisdicción y sector.",
+    "RFI dirigido a SAP/Coupa/Zycus/GEP solo si se considera el híbrido, exigiendo evidencia verificable.",
+    "Reusar /research-council para profundizar cada vendor finalista."
+  ],
+  "limitations": [
+    "Evidencia de capacidades mayoritariamente auto-reportada por vendors; informes de analistas tras paywall.",
+    "Mercado muy dinámico (adquisiciones y lanzamientos en beta cambian el cuadro en meses).",
+    "Algunas cifras de terceros no verificables en fuente primaria; tratadas como ilustrativas.",
+    "No se investigaron en profundidad contract-intelligence puros (Icertis, Sirion) ni el detalle de Oracle.",
+    "Sin acceso a datos internos reales (SAP, cotizaciones), el ajuste al caso es de referencia."
+  ]
+}
